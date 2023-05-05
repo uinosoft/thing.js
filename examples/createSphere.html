@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<script src="../dist/thing.community.umd.min.js"></script>
+	<script src="./js/dat.gui.min.js"></script>
+</head>
+
+<body>
+	<div id="div3d"></div>
+</body>
+
+<script type="module">
+	// Create main application, bind to 'div3d' DIV element as default
+	var app = new THING.App();
+
+	// Set the scene's backgroundColor
+	app.background = [0, 0, 0];
+
+	// Create box
+	const sphere = new THING.Sphere();
+</script>
+
+</html>
