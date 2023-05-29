@@ -39,7 +39,7 @@ import { App, Component } from '@thing.js/core';
 
 # Usage
 
-By default, `ThingJS` uses a element with `div3d` tag as the 3d rendering area.
+By default, `ThingJS` uses an element with `div3d` tag as the 3d rendering area.
 ```html
 <div id="div3d" />
 ```
