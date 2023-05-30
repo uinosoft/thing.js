@@ -41,18 +41,25 @@ import { App, Component } from '@thing.js/core';
 
 By default, `ThingJS` uses an element with `div3d` tag as the 3d rendering area.
 ```html
-<div id="div3d" />
-```
-Create the app.
-```javascript
-// create app with a scene url
-const app = new THING.App({
-    url: "./scenes/uino.gltf"
-    onComplete: function(ev) {
-        // after scene loaded
-        console.log(ev);
-    }
-});
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>ThingJS</title>
+        <meta charset="utf-8" />
+        <script src="./thing.js"></script>
+    </head>
+
+    <body style="margin: 0; padding: 0">
+        <div id="div3d"></div>
+    </body>
+    
+    <script type="module">
+        const app = new THING.App({
+            url: "./scenes/uino.gltf"
+        });
+    </script>
+</html>
 ```
 
 # License 
