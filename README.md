@@ -24,7 +24,7 @@ ESModule Build:
 ## NPM 
 `ThingJS` is published on npm. To install, use:
 ```bash
-> npm install '@thing.js/core' --save	
+> npm install @thing.js/core --save	
 ```
 
 This will allow you to Import `ThingJS` entirely using:
