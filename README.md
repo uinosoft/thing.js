@@ -8,7 +8,7 @@
 ## CDN
 Global Build:
 ```javascript
-<script src="https://cdn.uino.cn/thingjs-cli/thing.js"></script>
+<script src="https://cdn.uino.cn/thingjs-cli/thing.min.js"></script>
 <script>
     const app = new THING.App();
 </script>
@@ -17,14 +17,14 @@ Global Build:
 ESModule Build:
 ```javascript
 <script type="module">
-    import { App, Component } from 'https://cdn.uino.cn/thingjs-cli/thing.esm.js';
+    import { App, Component } from 'https://cdn.uino.cn/thingjs-cli/thing.min.esm.js';
 </script>
 ```
 
 ## NPM 
 `ThingJS` is published on npm. To install, use:
 ```bash
-> npm install '@thing.js/core' --save	
+> npm install @thing.js/core --save	
 ```
 
 This will allow you to Import `ThingJS` entirely using:
@@ -47,7 +47,7 @@ By default, `ThingJS` uses an element with `div3d` tag as the 3d rendering area.
     <head>
         <title>ThingJS</title>
         <meta charset="utf-8" />
-        <script src="./thing.js"></script>
+        <script src="./thing.min.js"></script>
     </head>
 
     <body style="margin: 0; padding: 0">
