@@ -1,74 +1,28 @@
 # 专业版
 
-`ThingJS` 2.0 包含更多功能，以及可以使用`studio`网站的资源。
+除了免费使用的基础版`basic`，`ThingJS`还提供专业版`pro`，`ThingJS`专业版和基础版的区别主要在：
+* `ThingJS`专业版可以使用`UINO`网站提供的资源；
+* `ThingJS`专业版可使用一些扩展功能，如：园区场景的对象和层级功能、地球城市功能、仿真效果等等扩展库；
 
-在当前工程下，安装依赖：
-```bash
-> npm install @thing.js/core --save	
-```
 
 ## 安装
+如果想使用`ThingJS`专业版，需要在`CLI`创建工程时，增加`--pro`参数
 
-## Bundle
-兼容1.0的`bundle`加载方法，需要在加载文件夹中确认包含`bundle.json`
-
-加载场景包：
-```javascript
-var bundle = app.loadBundle('./campus2/scene-bundle');
-bundle.waitForComplete().then((ev)=>{
-    const campus = bundle.campuses[0];
-});
+```bash
+> thing create project-name --pro
 ```
 
-加载插件包：
+## 登录
+在使用`ThingJS`专业版时，首先需要登录，登录的`url`是一个授权过的服务器，登陆代码如下：
 ```javascript
-const bundle = app.loadBundle('./plugins/xxx', { object: box });
-bundle.waitForComplete().then((ev) => {
-	console.log(bundle);
-	bundle.plugin.printPosition();
-});
+// 下面地址是UINO内部测试服务器的登录地址
+await THING.Utils.login('http://10.100.32.55:18081/auth/login');
 ```
 
-加载效果模板包：
-```javascript
-var bundle = app.loadBundle('./bundles/scene-bundle/theme');
-bundle.waitForComplete().then((ev) => {
-	console.log(bundle.theme);
-});
-```
+授权服务器，是`UINO`统一的授权服务，可以通过：
+* 下载服务器的安装包，解压运行，进行授权；
+* 使用授权服务的`docker`镜像，启动镜像，进行授权；
 
-加载城市包：
-```javascript
-var bundle = app.loadBundle("../bundle/demo");
-bundle.waitForComplete().then((ev) => {
-  console.log(bundle.map);
-});
-```
+具体方法，请参考授权服务器使用文档。
 
-加载标记包：
-```javascript
-var bundle = app.loadBundle('.libs/test/atm', { object: host });
-bundle.waitForComplete().then((ev) => {
-});
-```
 
-加载大屏/图表包：
-```javascript
-const bundle = THING.Utils.loadBundle('./大屏-未命名大屏', {
-    container: '#example' // 挂载节点
-  }
-)
-await bundle.waitForComplete() // 等待场景加载完成
-console.log(bundle.ui) // ui实例
-```
-
-加载拓扑包：
-```javascript
-const bundle = THING.Utils.loadBundle(url, {
-    container: '#example'
-  }
-);
-await bundle.waitForComplete();
-const graph = bundle.topo;
-console.log(graph.nodes);
-```

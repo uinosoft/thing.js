@@ -84,7 +84,7 @@ let url = "./plugins/plug01/index.js";
 let params = {};
 
 // await 的方式，等待加载完成
-let plugin = await app.loadPlugin(url, params);
+let plugin = await app.loadPlugin(url);
 plugin.sayHello();
 ```
 

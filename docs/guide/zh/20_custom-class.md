@@ -94,6 +94,6 @@ app.level.register(".Floor", new FloorControl());
 
 这样，即形成了一个简单的行业扩展类库，在项目中可直接引用这个库文件，或作为插件的方式加载。当切换到相应对象的层级后，就可以实现对这些对象的控制方式。
 
-可参考：[simple_campus.js](../../scripts/simple_campus.js "campus")
+可参考：[simple_campus.js](./scripts/sample_campus.js "campus")
 
 
