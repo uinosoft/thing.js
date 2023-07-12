@@ -1,7 +1,5 @@
 import os
 import re
-import sys
-import shutil
 
 def main(splitFile, outputPath):
     dir_path = outputPath
