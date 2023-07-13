@@ -10,7 +10,7 @@
 
 引入地图包，引入后会新增`THING.EARTH`的命名空间，之后初始化地图示例`Map`
 
-```javascript
+```html
 <script src="./libs/thing.min.js"></script>
 <script src="./libs/thing.earth.min.js"></script>
 <script>
