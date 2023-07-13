@@ -1,6 +1,6 @@
-# Bundle
+# Bundle包
 
-兼容1.0的`bundle`加载方法，需要在加载文件夹中确认包含`bundle.json`
+`bundle`包，是指一个包含`bundle.json`文件的文件夹，里面包含一个或多个资源文件，`ThingJS 1.0`的资源，多数是以`bundle`包的方式存储，可以通过`loadBundle接口`来加载。
 
 加载场景包：
 ```javascript

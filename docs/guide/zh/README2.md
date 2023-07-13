@@ -2507,13 +2507,73 @@ app.level.register(".Floor", new FloorControl());
 @xuheng 补充……
 
 
-# 城市
+# 地图
 <!-- map -->
 
+地图是`ThingJS`的一个扩展库，包括。。。功能，用于。。。场景等
+@huyang 补充一点定义的说明
 
-# Bundle
+> 注意：地图扩展库，需要使用`ThingJS`专业版。
+
+## 安装
+地图扩展库的下载地址：[thing.earth.min.js](https://cdn.uino.cn/thingjs-cli/thing.earth.min.js "earth")
+
+引入地图包，引入后会新增`THING.EARTH`的命名空间，之后初始化地图示例`Map`
+
+```javascript
+<script src="./libs/thing.min.js"></script>
+<script src="./libs/thing.earth.min.js"></script>
+<script>
+  const app = new THING.App();
+
+  // 初始化地图对象
+  const map = new THING.EARTH.Map();
+</script>
+```
+
+## 图层
+@huyang 补充一点说明
+
+```javascript
+// 创建一个瓦片图层
+var tileLayer = new THING.EARTH.TileLayer({
+  name: "tileLayer1",
+  url: "https://webst0{1,2,3,4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+});
+
+// 添加到地图
+map.addLayer(tileLayer);
+```
+
+## 事件
+地图注册点击事件：
+```javascript
+map.on("click", (ev) => {
+  // 获取鼠标点击处的经纬度
+  var lonlat = ev.coordinates;
+  console.log(lonlat);
+
+  // 将经纬度坐标转为三维坐标，第二个参数代表离地高度
+  var worldPos = THING.EARTH.Utils.convertLonlatToWorld(lonlat, 0);
+  console.log(worldPos);
+});
+```
+
+## 摄影机
+地图上摄影机飞行：
+```javascript
+app.camera.earthFlyTo({
+  lonlat: [116.495724, 39.977478],
+  height: 200,
+  duration: 3000,
+  onComplete: () => {
+    console.log("flyComplete");
+  },
+});
+```
+# Bundle包
 <!-- bundle -->
-兼容1.0的`bundle`加载方法，需要在加载文件夹中确认包含`bundle.json`
+`bundle`包，是指一个包含`bundle.json`文件的文件夹，里面包含一个或多个资源文件，`ThingJS 1.0`的资源，多数是以`bundle`包的方式存储，可以通过`loadBundle接口`来加载。
 
 加载场景包：
 ```javascript
