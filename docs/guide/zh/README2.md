@@ -1496,8 +1496,6 @@ class BuildingControl extends THING.BaseLevelControl {
 app.level.register(".Building", new BuildingControl({selectColor: "#FF00FF"}));
 ```
 
-层级控制的例子，可以参考例子代码： [sample_campus.js](./scripts/sample_campus.js "campus") 中的层级控制方式。
-
 ## 层级事件
 除了自定义层级的控制方式，引擎还支持注册层级进入和退出的事件，从而可以在层级进入或退出时，进行一些操作：
 ```javascript
