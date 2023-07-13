@@ -61,3 +61,8 @@ app.camera.earthFlyTo({
   },
 });
 ```
+
+## 更多内容
+
+请参考`UINO`文档中的 [地图文档](https://wiki.uino.com/book/thingjs-api20/624004eac78b0a6607ed973eeff77b75.html "地图文档")
+

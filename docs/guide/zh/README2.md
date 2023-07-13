@@ -2571,6 +2571,11 @@ app.camera.earthFlyTo({
   },
 });
 ```
+
+## 更多内容
+
+请参考`UINO`文档中的 [地图文档](https://wiki.uino.com/book/thingjs-api20/624004eac78b0a6607ed973eeff77b75.html "地图文档")
+
 # Bundle包
 <!-- bundle -->
 `bundle`包，是指一个包含`bundle.json`文件的文件夹，里面包含一个或多个资源文件，`ThingJS 1.0`的资源，多数是以`bundle`包的方式存储，可以通过`loadBundle接口`来加载。
