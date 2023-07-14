@@ -22,7 +22,6 @@ obj.doSomeMethod();
 切换目录并安装依赖后即可进入开发调试
 ```bash
 > cd my-prefab
-> npm i
 > npm run dev
 ```
 在`src`目录下编写预制件代码，开发调试过程中会自动将`src`目录的代码编译打包到`dist`目录下，`dist`目录中的预制件即可通过`ThingJS`正常加载。

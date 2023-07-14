@@ -1822,7 +1822,6 @@ app.uninstall("myPlugin");
 切换目录并安装依赖后即可进入开发调试：
 ```bash
 > cd my-plugin
-> npm i
 > npm run dev
 ```
 在`src`目录下编写插件代码，开发调试过程中会自动将`src`目录的代码编译打包到`dist`目录下，`dist`目录中的插件即可通过`ThingJS`正常加载。
@@ -1958,7 +1957,6 @@ obj.doSomeMethod();
 切换目录并安装依赖后即可进入开发调试
 ```bash
 > cd my-prefab
-> npm i
 > npm run dev
 ```
 在`src`目录下编写预制件代码，开发调试过程中会自动将`src`目录的代码编译打包到`dist`目录下，`dist`目录中的预制件即可通过`ThingJS`正常加载。
@@ -2022,31 +2020,20 @@ let line = app.create({
 
 **节点分类**：蓝图节点大体上可以分为 事件节点、动作节点、对象节点、流程控制节点、综合节点（预制件、子图等）。
 
-## 蓝图CLI
-
-通过CLI下载蓝图测试工具：
-```bash
-> thing create my-blueprint
-```
-然后选择 `Common` 类型下的 `Dev Base` 选项创建蓝图测试工具。
-
-切换目录并安装依赖后即可进入开发调试：
-```bash
-> cd my-blueprint
-> npm i
-> npm run dev
-```
-`nodes`目录下编写自定义蓝图节点，`src`目录下编写前端页面和交互逻辑，开发调试过程中会自动将`nodes`目录的代码编译打包到`dist`对应的目录中。
-
-
-
-
 ## 加载蓝图
+如果需要在`ThingJS`项目中加载蓝图文件，首先要确保这个蓝图中用到的节点已被注册，`ThingJS`中经常用到的节点包含在：[thing.blueprint.nodes.js](./xx.js "blueprint.nodes")，如果有其他自定义节点也需要确认引入并注册。
 
-如果需要在`ThingJS`项目中加载蓝图，可以使用`app.load()`方法。加载后得到一个蓝图对象`blueprint`，调用`run()`来运行。
-```javascript
-let asset = await app.load("/blueprints/bp01.json");
-let blueprint = asset.blueprints[0];
+然后可以使用`app.load()`方法加载蓝图文件，加载后得到一个蓝图对象`blueprint`，调用`run()`来运行：
+```html
+<script src="./libs/thing.min.js"></script>
+<script src="./libs/thing.blueprint.nodes.js"></script>
+<script>
+    const app = new THING.App();
+
+    let asset = await app.load("/blueprints/bp01.json");
+    let blueprint = asset.blueprints[0];
+    blueprint.run();
+</script>
 ```
 
 可以对蓝图进行变量的设置，或触发蓝图中的事件
@@ -2054,8 +2041,8 @@ let blueprint = asset.blueprints[0];
 // 设置变量
 blueprint.setVar('power', 100);
 
-// 触发蓝图中的事件
-blueprint.triggerEvent('click', {...});
+// 触发这个蓝图中的事件（其他蓝图的同名事件不执行）
+blueprint.triggerEvent('my-event', {...});
 ```
 
 ## 开发节点
@@ -2102,8 +2089,28 @@ class MyNode extends THING.BLUEPRINT.BaseNode {
 THING.BLUEPRINT.Utils.registerNode(MyNode);
 ```
 
-*待补充……*
+## 蓝图通信
+`ThingJS`中的自定义事件，在代码和蓝图中是等效的，所以可以通过 **自定义事件**，来进行代码和蓝图的双向通信，即：
+* 在`ThingJS`代码中，触发蓝图中的事件节点，执行蓝图中的自定义操作；
+* 或在蓝图中，触发自定义事件，然后执行`ThingJS`代码中的操作；
 
+例如，在蓝图中编辑下面的节点：
+
+![bp-event](./images/bp-event.png "bp-event")
+
+运行蓝图后，在`ThingJS`中调用下面代码，可以通过蓝图打印出`from code`：
+```javascript
+app.trigger('my-print', {'param': 'from code'});
+```
+
+运行蓝图后，点击场景中的按钮（由蓝图创建），可以打印出`from blueprint`：
+```javascript
+app.on('my-code', (ev)=>{console.log(ev);});
+```
+
+## 更多内容
+
+请参考`UINO`文档中的 [蓝图文档](https://wiki.uino.com/book/612f5205dec53e3d4278d89a/612f6719428a975580acb27d.html "蓝图文档")（需要更新！）
 
 # 文件格式
 <!-- format -->
@@ -2510,8 +2517,7 @@ app.level.register(".Floor", new FloorControl());
 # 地图
 <!-- map -->
 
-地图是`ThingJS`的一个扩展库，包括。。。功能，用于。。。场景等
-@huyang 补充一点定义的说明
+地图是`ThingJS`的一个扩展库，包括加载地图瓦片，地形以及地图上的点线面要素等功能，适用于需要基于地理信息数据进行三维可视化展示的场景。
 
 > 注意：地图扩展库，需要使用`ThingJS`专业版。
 
@@ -2532,10 +2538,10 @@ app.level.register(".Floor", new FloorControl());
 ```
 
 ## 图层
-@huyang 补充一点说明
+图层(Layer)是GIS中最基本的组织单位，用于展示不同类型的地理数据。引入图层的概念主要是为了方便管理地图场景中的地理对象。THING.EARTH中常用的图层有瓦片图层(TileLayer),要素图层(FeatureLayer),3dtile图层(Tile3dLayer),栅格图层(ImageLayer)等。
 
 ```javascript
-// 创建一个瓦片图层
+// 创建一个瓦片图层 url为高德地图卫星影像的瓦片服务地址
 var tileLayer = new THING.EARTH.TileLayer({
   name: "tileLayer1",
   url: "https://webst0{1,2,3,4}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
@@ -2543,15 +2549,31 @@ var tileLayer = new THING.EARTH.TileLayer({
 
 // 添加到地图
 map.addLayer(tileLayer);
+
+// 基于一个点的geojson文件创建一个FeatureLayer
+var featureLayer = new THING.EARTH.FeatureLayer({
+  name: 'tileLayer1',
+  url: '../data/pointData.geojson',
+  geoObjectType:'GeoPoint',
+  style:{
+    pointType:THING.EARTH.SymbolType.Vector,
+    size:2,
+    color:[1,0,0],
+    vectorType:THING.EARTH.VectorType.Circle
+  }
+});
+// 添加到地图
+map.addLayer(featureLayer);
 ```
 
 ## 事件
-地图注册点击事件：
+与其他ThingJS中的对象类似，可以给地图对象注册事件：
 ```javascript
-map.on("click", (ev) => {
+// 给地图添加点击事件
+map.on(THING.EventType.Click, (ev) => {
   // 获取鼠标点击处的经纬度
-  var lonlat = ev.coordinates;
-  console.log(lonlat);
+  var coordinates = ev.coordinates;
+  console.log(coordinates);
 
   // 将经纬度坐标转为三维坐标，第二个参数代表离地高度
   var worldPos = THING.EARTH.Utils.convertLonlatToWorld(lonlat, 0);
@@ -2576,9 +2598,13 @@ app.camera.earthFlyTo({
 
 请参考`UINO`文档中的 [地图文档](https://wiki.uino.com/book/thingjs-api20/624004eac78b0a6607ed973eeff77b75.html "地图文档")
 
+
+# 导航
+<!-- navigation -->
+
 # Bundle包
 <!-- bundle -->
-`bundle`包，是指一个包含`bundle.json`文件的文件夹，里面包含一个或多个资源文件，`ThingJS 1.0`的资源，多数是以`bundle`包的方式存储，可以通过`loadBundle接口`来加载。
+`bundle`包，是指一个包含`bundle.json`文件的文件夹，里面包含一个或多个资源文件，`bundle.json`指定了包的类型，以及入口文件，从`ThingJS 1.0`开始，多数资源都是以`bundle`包的方式存储，可以通过`loadBundle接口`来加载。
 
 加载场景包：
 ```javascript
