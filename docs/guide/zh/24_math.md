@@ -6,7 +6,7 @@
 * 颜色值：使用`#FF0000`或数组`[r, g, b]`（需要注意的是`rgb`取值范围是0~1之间），也可以使用`'red'`, `'green'`等内置颜色的字符串；
 * 时间：单位一般为毫秒`ms`，如：`2000ms`为2秒。
 
-`ThingJS`引擎数学相关的方法都在`THING.Math`名字空间下，其中一些常用方法举例：
+`ThingJS`引擎数学相关的方法都在`THING.Math`名字空间下，其中一些常用的方法举例：
 ```javascript
 // 向量相加
 let v3 = THING.Math.addVector(v1, v2);
