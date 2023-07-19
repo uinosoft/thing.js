@@ -22,7 +22,6 @@
 
 - **接数据**：更方便对接真实数据，以及提供数据仿真展示；
 
-
 # 安装
 <!-- install -->
 
@@ -274,12 +273,11 @@ space.disjoint(obj, cascade = true);
 
 空间可视化，将空间渲染出来
 ```javascript
-space.showBounding(true);
+space.showBounding(); // 参数默认为true
 ```
 
 <!-- 示例：
 <playground src="create_space3d.js"></playground> -->
-
 
 ## 父子对象
 对象可能具有父对象`obj.parent`或子对象`obj.children`，他们一般是由加载场景时自动创建的，也可以在运行时改变。
@@ -353,7 +351,7 @@ app.query('car01').destroy();
 obj.position = [0, 10, 0];
 
 // 设置旋转
-obj.rotate(45); // 沿默认轴旋转45度
+obj.rotate([0, 1, 0], 45); // 沿Y轴旋转45度
 obj.rotateOnAxis([0, 0, 1], 45); // 沿给定轴旋转45度
 obj.rotateY(45); // 沿Y轴旋转
 obj.rotation = [45, 0, 0];
@@ -447,6 +445,7 @@ let local = obj.localPosition;
 
 // 相对坐标转世界坐标
 let pos = obj.localToWorld([10, 0, 0]);
+
 // 世界坐标转相对坐标
 let local = obj.worldToLocal(pos);
 ```
@@ -454,6 +453,7 @@ let local = obj.worldToLocal(pos);
 ```javascript
 // 自身坐标转世界坐标
 let pos2 = obj.selfToWorld([10, 0, 0]);
+
 // 世界坐标转自身坐标
 let selfPos = obj.worldToSelf(pos2);
 ```
@@ -573,7 +573,7 @@ obj.style = {
 ```javascript
 // 淡入
 object.fadeIn({
-    loop: 2, // 2 次，如果是true则是循环
+    loop: 2, // 2 次，如果是-1则是循环
     duration: 2000
 });
 // 淡出
@@ -586,7 +586,6 @@ object.fadeOut({
 // 开启批量渲染
 app.query('*').makeInstancedDrawing();
 ```
-
 
 # 对象动画
 <!-- animation -->
@@ -645,7 +644,6 @@ obj = new THING.Entity({
     }
 });
 ```
-
 
 # 对象关系
 <!-- relationship -->
@@ -709,7 +707,9 @@ objs = obj.relationship.queryByName("control01");
 let rls = app.queryRelationships({
     "type": "control"
 });
-rls.destroy();
+rls.forEach(r => {
+    r.destroy();
+})
 ```
 
 # 参数化
@@ -720,13 +720,14 @@ rls.destroy();
 ## 点
 给定一批点坐标，生成一批点，可以通过`size`来控制点大小：
 ```javascript
-//创建点
+// 创建点
 const points = new THING.Points({
     points: [[10, 0, 0], [10, 0, 10], [0, 0, 10], [0, 0, 0]],
 });
 
-//点的大小
-points.size = [1.5, 5];
+// 设置点的大小
+points.size = 10;
+// 更改点的颜色
 points.style.color = "#FF0000";
 ```
 
@@ -775,8 +776,8 @@ let plane = new THING.Plane(1000, 1000);
 创建平面区域：
 ```javascript
 const plane2 = new THING.PlaneRegion({
-    points: [[0, 0, 0], [20, 0, 0], [20, 0, 20], [0, 0, 20]],
-    selfPlaneHoles: [[[5, 5], [14, 3], [14, 7], [6, 7]]],
+    points: [[0, 0, 0], [20, 0, 0], [20, 0, 20], [0, 0, 20]],// 顶点位置坐标
+    selfPlaneHoles: [[[5, 5], [14, 3], [14, 7], [6, 7]]],// 洞平面位置坐标
     position: [0, 0, 0],
     style: { color: '#00FFB3' }
 });
@@ -787,12 +788,13 @@ const plane2 = new THING.PlaneRegion({
 
 可以创建如：立方体、球体、圆柱体、胶囊等几等何体：
 ```javascript
-// 创建立方体、球
+// 创建立方体
 let box = new THING.Box(1, 2, 3);
+// 创建球
 let sphere = new THING.Sphere(0.5);
 
-// 创建立方体，更多参数
-let box = new THING.Box({
+// 创建立方体，多参数形式
+let box1 = new THING.Box({
     width: 3,
     height: 2,
     depth: 1,
@@ -805,11 +807,11 @@ let box = new THING.Box({
 
 ```javascript
 // 更多几何体
-new THING.Sphere({radius: 0.5, position: [12, 0, 0], style: { color: "#FF00FF" }});
-new THING.Cylinder({radiusTop: 0, position: [0, 0, 0], style: { color: "#FFA300" }});
-new THING.Circle({position: [4, 0, 0], style: { color: "#0000FF" }});
-new THING.Capsule({position: [8, 0, 0], style: { color: "#00FFFF" }});
-new THING.Torus({position: [-4, 0, 0], style: { color: "#FFFF00" }});
+new THING.Sphere({radius: 0.5, position: [12, 0, 0], style: { color: "#FF00FF" }});// 球
+new THING.Cylinder({radiusTop: 0, position: [0, 0, 0], style: { color: "#FFA300" }});// 圆柱
+new THING.Circle({position: [4, 0, 0], style: { color: "#0000FF" }});// 圆形
+new THING.Capsule({position: [8, 0, 0], style: { color: "#00FFFF" }});// 胶囊
+new THING.Torus({position: [-4, 0, 0], style: { color: "#FFFF00" }});// 圆环体
 ```
 
 还可以通过`ExtrudeShape`，指定一个形状和高度，来挤出一个体积的造型：
@@ -819,6 +821,7 @@ const shape = new THING.ExtrudeShape({
     points: [
         [0, 0.1, 0],
         [4, 0.1, 0],
+        [8, 0.1, 5],
         [4, 0.1, 10],
         [0, 0.1, 10],
     ],
@@ -827,32 +830,72 @@ const shape = new THING.ExtrudeShape({
 ```
 
 ## 粒子
-粒子系统`ParticleSystem`是一个三维对象，由多组粒子发射器`ParticleEmitter`组成，粒子系统为场景提供各种特殊效果，如：烟气、喷淋、雨雪，或一些特殊效果：
+粒子系统`ParticleSystem`是一个三维对象，由多组粒子发射器`ParticleEmitter`组成，粒子系统为场景提供各种特殊效果，如：烟气、喷淋、雨雪，或一些特殊效果。
+
+在以下示例中，演示了如何从头创建一个粒子系统：
+
 ```javascript
-// 创建粒子
-let particleSystem = new THING.ParticleSystem({
+// 首先创建一个粒子系统实例
+const particleSystem = new THING.ParticleSystem({
     name: 'particle-001',
     position: [30, 50, 0]
 });
 
-// 设置参数
-const emitter = particleSystem.groups[0].emitters[0];
-emitter.setAttribute('Position', { value: [0, 0, -50] });
-emitter.setAttribute('Acceleration', { value: [0, -10, 0] });
-emitter.setAttribute('Velocity', { value: [0, 25, 0], spread: [10, 7.5, 10] });
-emitter.setAttribute('ListColor', { value: [[1, 1, 1], [1, 0, 0]] });
-emitter.setAttribute('ListSize', { value: [2, 1] });
-emitter.setAttribute('ListOpacity', { value: [1, 0.1] });
-emitter.setAttribute('ParticleCount', 200);
+// 如果不传json数据，则ParticleSystem中默认包含一个ParticleGroup，ParticleGroup内默认包含一个ParticleEmitter
+// 所以后续代码无需创建ParticleGroup与ParticleEmitter，直接获取即可
+
+// 获取粒子组
+const group = particleSystem.groups[0];
+// 设置粒子组属性
+group.setAttribute('MaxParticleCount', 200); // 设置最大粒子数（必须），一般来说应该是所包含的发射器粒子数的总和
+
+// 获取粒子组中的粒子发射器
+const emitter = group.emitters[0];
+// 设置粒子发射器属性
+emitter.setAttribute('ParticleCount', 200); // 设置最大粒子数（必须）
+emitter.setAttribute('Position', { value: [0, 0, -50] }); // 粒子发射器的位置
+emitter.setAttribute('Acceleration', { value: [0, -10, 0] }); // 粒子的加速度
+emitter.setAttribute('Velocity', { value: [0, 25, 0], spread: [10, 7.5, 10] }); // 粒子的初始速度
+emitter.setAttribute('ListColor', { value: [[1, 1, 1], [1, 0, 0]] }); // 粒子的颜色渐变列表
+emitter.setAttribute('ListSize', { value: [2, 1] }); // 粒子的尺寸变化列表
+emitter.setAttribute('ListOpacity', { value: [1, 0.1] }); // 粒子的透明度变化列表
 ```
 
+也可以在粒子编辑器中编辑粒子，通过导出的json数据创建粒子系统实例：
+
 ```javascript
-// 通过json创建粒子
-let particleSystem = new THING.ParticleSystem({
-    name: "par01",
-    url: "./particles"
+const particleSystem = new THING.ParticleSystem({
+    name: "particle-002",
+    url: "./particles/index.json" // 粒子文件路径
 });
 ```
+
+更多设置和使用方式参考：
+
+* [ParticleSystem](https://wiki.uino.com/book/thingjs-api20/c956ea8a58916eb78460cd0d378d5881.html)
+* [ParticleGroup](https://wiki.uino.com/book/thingjs-api20/63157f229ffd9d245dbe0fad.html)
+* [ParticleEmitter](https://wiki.uino.com/book/thingjs-api20/631572679ffd9d245dbe0f98.html)
+
+以上这些三维对象都可以通过app.create方式创建，需要指定好对象类型。
+```javascript
+// 创建点
+app.create({
+    type: 'Points',
+    points: [[10, 0, 0], [10, 0, 10], [0, 0, 10], [0, 0, 0]],
+    size: 10,
+    style: {
+        color: "#FF0000"
+    }
+});
+// 创建像素线
+app.create({
+    type: 'PixelLine',
+    selfPoints: [[10, 0, 0], [10, 0, 10], [0, 0, 10], [0, 0, 0]],
+    closure: true // 以闭环方式创建
+});
+```
+其他物体创建方式参考：
+* [app.create](https://wiki.uino.com/book/thingjs-api20/4f90b3849989d7464763b1453294497b.html#create(param)%20%E2%86%92%20{THING.BaseObject}.html)
 
 # 界面
 <!-- gui -->
@@ -873,10 +916,11 @@ const marker = new THING.Marker({
     style: {
         image: new THING.ImageTexture('./alarm_build.png')
     },
-    pivot: [0.5, 0]
+    pivot: [0.5, 0],
+    scale: [1, 1, 1]
 })
 
-// 设置标记缩放动画
+// 设置标记缩放动画, 在scale [1, 1, 1] 与[2, 2, 2] 之前插值切换
 marker.scaleTo([2, 2, 2], {
     duration: 2000,
     loopType: THING.LoopType.PingPong,
@@ -891,7 +935,7 @@ marker.scaleTo([2, 2, 2], {
 let label = new THING.Label({
     fontText: '文字标签 ',
     fontSize: 25,
-    position: [0, 15, 0],
+    position: [0, 2, 0],
     renderType: THING.RenderType.Plane
 });
 ```
@@ -907,7 +951,7 @@ let richLabel = new THING.Label({           // 填充的文字标签
     </p>`,
     fontColor: 'orange',
     richText: true,
-    position: [0, -15, 0]
+    position: [0, 2, 0]
 });
 ```
 
@@ -924,20 +968,28 @@ let label = new THING.Label({
 ```
 
 ## 页面元素
-可以直接给对象增加一个`CSS2DComponent`组件，通过 DOM 元素来设置一个页面元素的头顶牌效果：
+可以直接给对象增加一个`CSS2DComponent` 或`CSS3DComponent`组件，通过 DOM 元素来设置一个页面元素的头顶牌效果：
+```html
+  <div id="board1" style="width: 100px; height: 100px; background: red; position: absolute; left: -100px;">
+    CSS2D
+  </div>
+  <div id="board2" style="width: 100px; height: 100px; background: green; position: absolute; left: -100px">
+    CSS3D
+  </div>
+```
 ```javascript
 let box = new THING.Box(2,2,2);
 
 // 2D页面元素
-box.addComponent(THING.DOM.CSS2DComponent, 'sign');
-box.sign.domElement = document.getElementById('board');
-box.sign.offset = [0, 3, 0];
+box.addComponent(THING.DOM.CSS2DComponent, 'sign1');
+box.sign1.domElement = document.getElementById('board1');
+box.sign1.offset = [0, 3, 0];
 
 // 3D页面元素
-box.addComponent(THING.DOM.CSS3DComponent, 'sign');
-box.sign.domElement = document.getElementById('board');
-box.sign.pivot = [0.5, -0.5];
-box.sign.renderType = THING.RenderType.Plane;
+box.addComponent(THING.DOM.CSS3DComponent, 'sign2');
+box.sign2.domElement = document.getElementById('board2');
+box.sign2.pivot = [0.5, -0.5];
+box.sign2.renderType = THING.RenderType.Plane;
 ```
 
 ## 页面视图
@@ -958,9 +1010,8 @@ var webView = new THING.WebView({
 <!-- camera -->
 
 在`ThingJS`引擎中，默认提供了摄影机对象`app.camera`，以及它的默认控制方式。摄影机就相当于手机上的摄像头，随着摄影机的位置`position`、拍摄点`target`的变化，对场景进行取景，之后渲染到屏幕上。摄影机提供了设置视角、飞行、模式，以及控制方式等多种功能。
-
 ## 视角
-通过摄影机的`position`、`target`属性，或这`lookAt`方法来设置摄影机看点和角度：
+通过摄影机的`position`、`target`属性，或者`lookAt`方法来设置摄影机看点和角度：
 ```javascript
 // 设置摄像机位置
 app.camera.position = [0, 20, 20];
@@ -974,12 +1025,14 @@ app.camera.lookAt([-30, 10, 0]);
 
 摄影机提供的`fit`方法，可以根据对象的大小，自动计算一个最佳看点，并设置到这个看点上：
 ```javascript
+// 摄像机聚焦到obj对象上
 app.camera.fit(obj);
 ```
 
 ## 飞行
 摄影机提供的`flyTo`方法，可以飞到一个位置和看点上，通过`duration`设置飞行时间，飞行完成后调用`onComplete`方法。
 ```javascript
+// 摄像机经过1000ms飞行到指定位置和视点
 app.camera.flyTo({
     position: [2, 5, 6],
     target: [0, 0, 0],
@@ -997,11 +1050,11 @@ app.camera.flyTo({
 
 可通过摄影机的`setProjectionType`来设置两种模式，枚举`ProjectionType`包含两种模式，`duration`参数可以控制切换模式的过渡时间：
 ```javascript
-// 设置为正交投影（切换时间2秒）, .Perspective为透视投影
+// 设置为正交投影（切换时间2秒）
 app.camera.setProjectionType(THING.ProjectionType.Orthographic, 2000);
 ```
 
-摄影机还提供了几种视图的切换（正、顶、侧视图），一般可以配合正交模式，枚举`ViewModeType`中，提供多种视图模式：
+摄影机还提供了几种视图的切换（正、顶、侧视图），一般会配合正交模式一起使用，枚举`ViewModeType`中，提供多种视图模式：
 ```javascript
 // 设置顶视图
 app.camera.viewMode = THING.ViewModeType.Top;
@@ -1014,9 +1067,9 @@ camera.enable = true; // 打开/关闭控制操作
 camera.enableRotate = true; // 打开/关闭旋转
 camera.enablePan = true; // 打开/关闭平移
 camera.enableZoom = true; // 打开/关闭缩放
-camera.rotateSpeed = 1; // 获取/设置旋转速度
-camera.panSpeed = 1; // 获取/设置平移速度
-camera.zoomSpeed = 1; // 获取/设置缩放速度
+camera.rotateSpeed = 1; // 设置旋转速度
+camera.panSpeed = 1; // 设置平移速度
+camera.zoomSpeed = 1; // 设置缩放速度
 ```
 可以通过重写摄影机控制组件，来实现一个你自己的摄影机控制方式。更多控制可以参考API手册。
 
@@ -1037,7 +1090,11 @@ camera.fov = 45;
 ```javascript
 // 增加一个摄影机
 var cam01 = new THING.Camera();
+// 设置摄像机的位置
+cam01.position = [0, 10, 0];
+// 开启视口渲染模式
 cam01.enableViewport = true;
+// 设置视口大小
 cam01.viewport = [0, 15, 128, 128];	// left, top, width, height
 
 // 再增加一个摄影机
@@ -1071,7 +1128,7 @@ app.queryByTags('Building | BuildingElement');
 app.queryByUserData('物体类型');
 
 // 按标自定义属性查，userData中， 包含 '物体类型' 名称，并且属性值为 '叉车' 的对象
-app.queryByUserData('物体类型', '叉车');
+app.queryByUserData('物体类型=叉车');
 
 // 按照正则表达式查
 const exp = new RegExp("car");
@@ -1100,7 +1157,7 @@ app.query('.Entity').query('[userData/品牌=IBM]');
 
 局部查询是指在某个对象孩子范围内的查询，通过`obj.query`接口实现，接口的方式类似`app.query`，下面举一些例子，其中假设`building`是一个建筑对象：
 ```javascript
-// 子对象查询，查询自定义属性中包含“物体类型”的子对象
+// 子对象查询，查询自定义属性中包含 '物体类型' 的子对象
 obj.query('[userData/物体类型]');
 
 // 选取建筑内的所有房间
@@ -1160,6 +1217,27 @@ app.query('.Entity').remove('car04');
 // 自己创建选择器
 let sel = new Selector();
 sel.push(obj);
+```
+
+选择器还支持以动态查询的方式进行处理：
+
+```javascript
+// 以动态查询的方式，收集 Box 类型的对象集合
+let result = app.query('.Box', { dynamic: true });
+
+// 创建子对象
+let box1 = new THING.Box({
+    position: [0, 3, 0],
+});
+
+let box2 = new THING.Box({
+    position: [0, -3, 0],
+});
+
+// 当最后一个对象创建完毕后，输出对象集合信息
+box2.on(THING.EventType.Create, function () {
+    console.log(result);
+});
 ```
 
 # 事件
@@ -1260,7 +1338,7 @@ app.pauseEvent(THING.EventType.EnterLevel, '.Floor', eventTag);
 app.resumeEvent(THING.EventType.LeaveLevel, '.Floor', eventTag);
 ```
 
-可以通过`off`来停止某个事件。
+可以通过`off`来卸载某个事件。
 ```javascript
 box.off('update');
 ```
@@ -1352,11 +1430,11 @@ const url = "./scenes/simple.json";
 
 // await 的方式，等待加载完成
 let asset = await app.load(url);
-console.log( asset.root );
+console.log( asset );
 
 // 或 then 的方式，等待加载完成后回调
 app.load(url).then((ev) => {
-    console.log(ev.root); // ev.object是根节点
+    console.log(ev.root); // root 是根节点
 })；
 ```
 
@@ -1383,11 +1461,11 @@ await app.loadGLTF("./scenes/uino.gltf");
 app.load(url, {
     // 场景加载完成回调
     onComplete: (ev) => {
-        console.log(ev.object);
+        console.log(ev.root);
     },
     // 场景加载进度回调
-    onProgress: (num) => {
-        console.log(num);
+    onProgress: (ev) => {
+        console.log(ev.progress);
     },
     // 场景加载错误回调
     onError: (ev) => {
@@ -1521,7 +1599,12 @@ app.on(THING.EventType.LeaveLevel, '.Building', (e)=>{}, 'levelTag');
 app.background = "#0000FF";
 ```
 
-设置天空盒，需要指定6个图片文件的地址：
+直接设置图片作为背景：
+```javascript
+app.background = "./images/bluesky/posx.jpg";
+```
+
+设置天空盒作为背景，需要指定6个图片文件的地址：
 ```javascript
 const baseURL = "./images/bluesky/";
 const cubeMap = new THING.CubeTexture([
@@ -1534,11 +1617,8 @@ const cubeMap = new THING.CubeTexture([
 ]);
 app.background = cubeMap;
 ```
-
-更简单的方法是直接指定一个路径，但需要确保路径里面包含和上面文件名相同的6个图片文件，引擎内部会自动按上面的文件名去加载这些图片：
-```javascript
-app.background = baseURL;
-```
+更多创建CubeTexture方式请参考:
+* [THING.CubeTexture](https://wiki.uino.com/book/thingjs-api20/62e8f92a0745a6a37a6388df.html)
 
 直接设置`app.background`为`null`即可清空背景：
 ```javascript
@@ -1557,14 +1637,20 @@ obj.style.envMap = cubeMap;
 
 直接设置`app.envMap`为`null`即可清空环境图：
 ```javascript
+// 关闭全局环境贴图
 app.envMap = null;
+// 关闭单个物体的环境贴图
 obj.style.envMap = null;
 ```
 
-另外，可以通过`app.camera.fog`可以设置雾的效果：
+## 雾
+用于模拟室外环境中的雾或雾气，可以通过`app.camera.fog`设置雾的效果：
 ```javascript
+// 开启雾的效果
 app.camera.fog.enable = true;
+// 设置雾的远平面距离
 app.camera.fog.far = 300;
+// 设置雾的颜色
 app.camera.fog.color = 'white';
 ```
 
@@ -1572,28 +1658,50 @@ app.camera.fog.color = 'white';
 
 `ThingJS`引擎在场景中默认提供了 环境光 和 一个主光源，可以通过`app.scene.ambientLight` 和 `app.scene.mainLight` 来访问：
 ```javascript
-// 场景默认的 环境光 和 直射光
+// 获取场景默认环境光
 const ambientLight = app.scene.ambientLight;
+// 获取场景默认直射光
 const mainLight = app.scene.mainLight;
 ```
 
-可以通过灯光的颜色`color`属性、强度`intensity`属性、阴影`castShadow`属性等对灯光进行调整：
+可以通过灯光的颜色`color`属性、强度`intensity`属性、阴影`castShadow`属性等对灯光进行调整，注意在使用阴影前需要一些物体来反映阴影效果：
 ```javascript
-// 修改默认灯光的参数
-ambientLight.color = [0.8, 0.8, 1.0];
-mainLight.intensity = 0.5;
-mainLight.adapter.horzAngle = 80;
+// 生成地面
+const plane = new THING.Plane(100, 100);
+// 生成两个box
+const box1 = new THING.Box({
+    position: [0,5,0]
+});
+const box2 = new THING.Box({
+    position: [3,5,0],
+    style: {
+        color: 'blue'
+    }
+});
 
-// 直射光可以支持开启阴影
+// 设置环境光的颜色
+ambientLight.color = [0.8, 0.8, 1.0];
+// 设置直射光的光照强度
+mainLight.intensity = 0.5;
+// 设置直射光的水平方向角度
+mainLight.adapter.horzAngle = 80;
+// 设置直射光的垂直方向角度
+mainLight.adapter.vertAngle = 30;
+
+// 直射光开启阴影
 mainLight.castShadow = true;
+// 设置阴影效果品质
 mainLight.shadowQuality = THING.ShadowQualityType.High;
 ```
 
 可以创建更多光源，目前支持`AmbientLight`，`DirectionalLight`，`HemisphereLight`，`SpotLight`等几种灯光
 ```javascript
-// 创建聚光灯
-const spotLight = new THING.SpotLight();
-spotLight.position = [0, 1, 0];
+// 创建朝向地面的聚光灯
+const spotLight = new THING.SpotLight({
+    rotation: [-90, 0, 0],
+    position: [0, 10, 0],
+    castShadow: true,
+});
 
 // 设置环境贴图提供的环境光照：
 app.scene.envMapLightIntensity = 0;
@@ -1601,7 +1709,9 @@ app.scene.envMapLightIntensity = 0;
 
 ## 后处理
 
-后处理`Post-Processing`是指在渲染之后，对最终渲染的结果进行后期加工的过程，用于实现各种特殊效果。可以通过`camera.postEffect`来设置后处理效果：
+后处理`Post-Processing`是指在渲染之后，对最终渲染的结果进行后期加工的过程，用于实现各种特殊效果。ThingJS中后期特效包括`全屏后期特效`与`逐物体后期特效`。
+
+可以通过`camera.postEffect`来设置全屏后处理效果：
 
 ```javascript
 // 获取当前的后期参数
@@ -1611,16 +1721,29 @@ const config = app.camera.postEffect;
 app.camera.postEffect = config;
 
 // 修改后期设置示例
-app.camera.postEffect.colorCorrection.gamma = 1.5;
-app.camera.postEffect.chromaticAberration.enable = true;
+app.camera.postEffect.colorCorrection.gamma = 1.5; // 设置颜色矫正后期中的gamma值
+app.camera.postEffect.chromaticAberration.enable = true; // 开启色偏特效
 
-// 物体的style.effect上还支持设置一些逐物体特效
+```
+
+关于全屏后期特效，更多设置选项参考[摄像机后期效果组件类文档](https://wiki.uino.com/book/thingjs-api20/b82c53ce76e253b5715669e631d664ab.html)。
+
+另外，`ThingJS`还支持特定物体的发光、勾边等逐物体后期特效。逐物体特效虽然支持物体设置各自的开关与强度值，但其余参数例如发光阈值、发光半径、总开关等等，需要通过`camera.effect`来进行全局设置：
+
+```javascript
+// 在物体的style.effect上支持设置逐物体特效glow，强度为1
 object.style.effect.glow = 1;
 
-// 逐物体特效，可以通过相机的effects接口进行一些整体参数控制
-app.camera.effect.glow.strength = 3.5;
-app.camera.effect.glow.threshold = 0.1;
+// 通过camera.effect来对这些逐物体特效的整体效果做一些调节
+app.camera.effect.glow.enable = true; // 总开关，如果为false，那么场景中所有物体的glow效果都会失效
+app.camera.effect.glow.strength = 3.5; // 全局特效强度，实际特效强度 = 物体特效强度 * 全局特效强度
+app.camera.effect.glow.threshold = 0.1; // glow特效的阈值
 ```
+
+关于逐物体后期特效，更多设置选项参考：
+
+* [摄像机逐物体特效管理的组件类](https://wiki.uino.com/book/thingjs-api20/052f51dced987af9556c2f233982743f.html) 
+* [逐物体特效列表](https://wiki.uino.com/book/thingjs-api20/63169ef99ffd9d245dbe13da.html#StyleEffectResult)
 
 # 组件
 <!-- component -->
@@ -1662,8 +1785,7 @@ obj.rotator.speed = 100;
 
 在组件中，可以实现下列的生命周期方法的回调。
 
-![Component](./images/compnent.png "Component")
-
+![Component](./images/component.png "Component")
 
 其他生命周期方法如：`onLoad` 物体加载资源后的回调，`onAppQuit` 应用退出时候的回调等。
 
@@ -1679,25 +1801,62 @@ class MyComp extends THING.Component {
 ## 添加组件
 给对象添加组件`addComponent`的几种重载方法。当指定组件名字时，对象身上即可包含这个名字的组件成员：
 ```javascript
+// 通过传入类型名的方式
 let rotator = obj.addComponent(MyRotator);
+```
 
+```javascript
+// 传入类型名和组件名称
 obj.addComponent(MyRotator, 'rotator');
 obj.rotator.speed = 100;
+```
 
-obj.addComponent(MyRotator, { speed: 10 });
+```javascript
+// 传入类型名和组件参数
+let rotator = obj.addComponent(MyRotator, { speed: 10 });
+```
+
+```javascript
+// 传入类型名、组件名称和组件参数
 obj.addComponent(MyRotator, 'rotator', { speed: 10 });
+```
 
+```javascript
+// 传入组件实例、组件名称和组件参数
 let rotator = new MyRotator();
-obj.addComponent(rotator, 'rotator');
+obj.addComponent(rotator, 'rotator', { speed: 10 });
 ```
 
 ## 获取组件
 通过 对象成员`obj.components` 或 `getComponent`，可以获取对象的组件：
 ```javascript
-rotator = obj.getComponentByName('rotator');
-rotator = obj.getComponentByType(MyRotator);
+// 根据名称获取指定组件
+let rotator = obj.getComponentByName('rotator');
+```
 
-let comp = obj.components['rotator'];
+```javascript
+// 根据名称获取指定组件
+let rotator = obj.components['rotator'];
+```
+
+```javascript
+// 获取某种类型的组件，返回第一个该类型的组件
+let rotator = obj.getComponentByType(MyRotator);
+```
+
+```javascript
+// 获取某种类型的组件，以数组形式返回全部该类型组件
+let rotators = obj.getComponentsByType(MyRotator);
+```
+
+```javascript
+// 获取所有已使用的组件
+let components = obj.components;
+```
+
+```javascript
+// 获取所有组件，返回对象上挂载的所有组件
+let components = obj.getAllComponents();
 ```
 
 ## 禁用删除
@@ -1725,7 +1884,7 @@ class MyComp extends THING.Component {
 ```
 
 ## 导出成员
-下面的写法，可以将组件的`speed`属性和`setColor`方法暴露到对象身上使用：
+使用静态数组导出插件属性和方法，其中exportProperties用来导出属性，exportFunctions用来导出方法，下面的写法，可以将组件的`speed`属性和`setColor`方法暴露到对象身上使用：
 ```javascript
 class MyComp extends THING.Component {
     // 需要导出的属性
@@ -1835,7 +1994,7 @@ let url = "./plugins/plug01/index.js";
 let params = {};
 
 // await 的方式，等待加载完成
-let plugin = await app.loadPlugin(url);
+let plugin = await app.loadPlugin(url, params);
 plugin.sayHello();
 ```
 
@@ -1893,7 +2052,7 @@ class Navigation extends THING.BasePlugin {
 这样的话，属性speed和方法move就被暴露出去，暴露出去的数据可以通过插件的实例上的`plugin.props`获取到。
 
 ## 导出类
-很多时候我们的业务需要自定义一些类（例如机柜类、车类、人类等），然后将这些类交给各个应用自己去实例。
+很多时候我们的业务需要自定义一些类（例如机柜类、车类、人类等），然后将这些类交给各个应用自己去创建实例。
 
 例如，一个自定义机柜类：
 ```javascript
@@ -1948,13 +2107,14 @@ await obj.waitForComplete();
 obj.doSomeMethod();
 ```
 
+## 预制件CLI
 可通过CLI创建一个预制件包：
 ```bash
 > thing create my-prefab
 ```
-然后选择 `Resource` 类型下的 `Prefab` 选项创建预制件模版。
+然后选择 `Resource` 类型下的 `Prefab` 选项创建预制件模版。按下回车键，开始创建预制件项目。创建过程耗时较长，请稍作等待，整个过程包括下载模板，安装依赖，项目编译构建三个步骤，每个步骤均有提示信息。
 
-切换目录并安装依赖后即可进入开发调试
+预制件项目创建后，切换至当前预制件项目目录之后，即可进入开发调试
 ```bash
 > cd my-prefab
 > npm run dev
@@ -1964,7 +2124,6 @@ obj.doSomeMethod();
 > 注意：`src`下可以创建多个预制件目录，对应`dist`目录也会编译成多份预制件资源。
 
 编写时，可以通过默认提供的`index.html`页面来进行测试，导出按钮可以保存当前预制件。
-
 
 # 自定义类
 <!-- custom-class -->
@@ -2023,7 +2182,7 @@ let line = app.create({
 ## 加载蓝图
 如果需要在`ThingJS`项目中加载蓝图文件，首先要确保这个蓝图中用到的节点已被注册，`ThingJS`中经常用到的节点包含在：[thing.blueprint.nodes.js](./xx.js "blueprint.nodes")，如果有其他自定义节点也需要确认引入并注册。
 
-然后可以使用`app.load()`方法加载蓝图文件，加载后得到一个蓝图对象`blueprint`，调用`run()`来运行：
+然后可以使用`app.load()`方法加载运行蓝图文件：
 ```html
 <script src="./libs/thing.min.js"></script>
 <script src="./libs/thing.blueprint.nodes.js"></script>
@@ -2032,7 +2191,6 @@ let line = app.create({
 
     let asset = await app.load("/blueprints/bp01.json");
     let blueprint = asset.blueprints[0];
-    blueprint.run();
 </script>
 ```
 
@@ -2203,7 +2361,7 @@ console.log(asset.blueprints[0]);
 
 ```javascript
 // 加载，但不立即生效
-let asset = await app.load("./themes/theme.json", {apply: false});
+let asset = await app.load("./themes/theme.json", { apply: false });
 
 // 在需要的时候，让其生效
 asset.apply();
@@ -2256,9 +2414,8 @@ let obj = new THING.Entity({
 });
 ```
 
-## 导出
 导出文件，需要通过构建一个`SceneExporter`的导出器，将需要导出的内容添加到导出器中，然后导出。
-
+创建导出器
 ```javascript
 // 导出器
 let exporter = new THING.SceneExporter();
@@ -2327,6 +2484,17 @@ exporter.addFiles([
 ]);
 ```
 
+添加拓展信息
+```javascript
+exporter.addExtensions({ isPrefab: true });
+```
+
+注册Resolver
+```javascript
+let resolver = new THING.StorageResolver({data: []});
+exporter.registerResolver('storage', resolver);
+```
+
 导出：
 ```javascript
 let data = exporter.export();
@@ -2342,10 +2510,10 @@ let data = exporter.export();
     "nodes" : [
         {
             "name" : "Building01",        
-            "children" : [0，1，2],
+            "children" : [1, 2],
             "extras" : {
                 "type" : "Building",
-                "tags" : "Building"
+                "tags" : ["Building"]
             }
         }
     ]
@@ -2440,7 +2608,6 @@ await THING.Utils.login('http://10.100.32.55:18081/auth/login');
 * 使用授权服务的`docker`镜像，启动镜像，进行授权；
 
 具体方法，请参考授权服务器使用文档。
-
 
 # 园区
 <!-- campus -->
@@ -2609,32 +2776,32 @@ app.camera.earthFlyTo({
 加载场景包：
 ```javascript
 var bundle = app.loadBundle('./campus2/scene-bundle');
-bundle.waitForComplete().then((ev)=>{
-    const campus = bundle.campuses[0];
-});
-```
-
-加载插件包：
-```javascript
-const bundle = app.loadBundle('./plugins/xxx', { object: box });
-bundle.waitForComplete().then((ev) => {
-	console.log(bundle);
-	bundle.plugin.printPosition();
+bundle.waitForComplete().then(() => {
+    const campus = bundle.campus;
+    // const campus = bundle.campuses[0];
 });
 ```
 
 加载效果模板包：
 ```javascript
+// 第一个参数url
+// 第二个参数为可选参数: { apply: true, root: app.query('.Campus')[0] }
+// 如果第二个参数传入{ apply: false }, 即只加载bundle中的文件, 那么可以使用bundle中提供的apply方法
 var bundle = app.loadBundle('./bundles/scene-bundle/theme');
-bundle.waitForComplete().then((ev) => {
-	console.log(bundle.theme);
+
+bundle.waitForComplete().then(() => {
+    // 存放效果模板文件的数据
+    console.log(bundle.theme);
+    
+    // 将bundle中的效果应用到root上, root的值默认是app.query('.Campus')[0]
+    // bundle.apply(root);
 });
 ```
 
 加载城市包：
 ```javascript
 var bundle = app.loadBundle("../bundle/demo");
-bundle.waitForComplete().then((ev) => {
+bundle.waitForComplete().then(() => {
   console.log(bundle.map);
 });
 ```
@@ -2642,7 +2809,10 @@ bundle.waitForComplete().then((ev) => {
 加载标记包：
 ```javascript
 var bundle = app.loadBundle('.libs/test/atm', { object: host });
-bundle.waitForComplete().then((ev) => {
+bundle.waitForComplete().then(() => {
+    // 给物体挂接标记
+    let car = app.query('#car01')[0];
+    bundle.addForObject(car);
 });
 ```
 
@@ -2652,8 +2822,12 @@ const bundle = THING.Utils.loadBundle('./大屏-未命名大屏', {
     container: '#example' // 挂载节点
   }
 )
-await bundle.waitForComplete() // 等待场景加载完成
-console.log(bundle.ui) // ui实例
+
+// 等待场景加载完成
+await bundle.waitForComplete();
+
+// ui实例
+console.log(bundle.ui);
 ```
 
 加载拓扑包：
