@@ -7,10 +7,10 @@
     "nodes" : [
         {
             "name" : "Building01",        
-            "children" : [0，1，2],
+            "children" : [1, 2],
             "extras" : {
                 "type" : "Building",
-                "tags" : "Building"
+                "tags" : ["Building"]
             }
         }
     ]

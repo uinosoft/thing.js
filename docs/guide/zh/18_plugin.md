@@ -83,7 +83,7 @@ let url = "./plugins/plug01/index.js";
 let params = {};
 
 // await 的方式，等待加载完成
-let plugin = await app.loadPlugin(url);
+let plugin = await app.loadPlugin(url, params);
 plugin.sayHello();
 ```
 
@@ -141,7 +141,7 @@ class Navigation extends THING.BasePlugin {
 这样的话，属性speed和方法move就被暴露出去，暴露出去的数据可以通过插件的实例上的`plugin.props`获取到。
 
 ## 导出类
-很多时候我们的业务需要自定义一些类（例如机柜类、车类、人类等），然后将这些类交给各个应用自己去实例。
+很多时候我们的业务需要自定义一些类（例如机柜类、车类、人类等），然后将这些类交给各个应用自己去创建实例。
 
 例如，一个自定义机柜类：
 ```javascript

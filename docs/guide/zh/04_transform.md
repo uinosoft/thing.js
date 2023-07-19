@@ -9,7 +9,7 @@
 obj.position = [0, 10, 0];
 
 // 设置旋转
-obj.rotate(45); // 沿默认轴旋转45度
+obj.rotate([0, 1, 0], 45); // 沿Y轴旋转45度
 obj.rotateOnAxis([0, 0, 1], 45); // 沿给定轴旋转45度
 obj.rotateY(45); // 沿Y轴旋转
 obj.rotation = [45, 0, 0];
@@ -100,6 +100,7 @@ let local = obj.localPosition;
 
 // 相对坐标转世界坐标
 let pos = obj.localToWorld([10, 0, 0]);
+
 // 世界坐标转相对坐标
 let local = obj.worldToLocal(pos);
 ```
@@ -107,6 +108,7 @@ let local = obj.worldToLocal(pos);
 ```javascript
 // 自身坐标转世界坐标
 let pos2 = obj.selfToWorld([10, 0, 0]);
+
 // 世界坐标转自身坐标
 let selfPos = obj.worldToSelf(pos2);
 ```

@@ -13,11 +13,11 @@ const url = "./scenes/simple.json";
 
 // await 的方式，等待加载完成
 let asset = await app.load(url);
-console.log( asset.root );
+console.log( asset );
 
 // 或 then 的方式，等待加载完成后回调
 app.load(url).then((ev) => {
-    console.log(ev.root); // ev.object是根节点
+    console.log(ev.root); // root 是根节点
 })；
 ```
 
@@ -44,11 +44,11 @@ await app.loadGLTF("./scenes/uino.gltf");
 app.load(url, {
     // 场景加载完成回调
     onComplete: (ev) => {
-        console.log(ev.object);
+        console.log(ev.root);
     },
     // 场景加载进度回调
-    onProgress: (num) => {
-        console.log(num);
+    onProgress: (ev) => {
+        console.log(ev.progress);
     },
     // 场景加载错误回调
     onError: (ev) => {

@@ -37,8 +37,7 @@ obj.rotator.speed = 100;
 
 在组件中，可以实现下列的生命周期方法的回调。
 
-![Component](./images/compnent.png "Component")
-
+![Component](./images/component.png "Component")
 
 其他生命周期方法如：`onLoad` 物体加载资源后的回调，`onAppQuit` 应用退出时候的回调等。
 
@@ -54,25 +53,62 @@ class MyComp extends THING.Component {
 ## 添加组件
 给对象添加组件`addComponent`的几种重载方法。当指定组件名字时，对象身上即可包含这个名字的组件成员：
 ```javascript
+// 通过传入类型名的方式
 let rotator = obj.addComponent(MyRotator);
+```
 
+```javascript
+// 传入类型名和组件名称
 obj.addComponent(MyRotator, 'rotator');
 obj.rotator.speed = 100;
+```
 
-obj.addComponent(MyRotator, { speed: 10 });
+```javascript
+// 传入类型名和组件参数
+let rotator = obj.addComponent(MyRotator, { speed: 10 });
+```
+
+```javascript
+// 传入类型名、组件名称和组件参数
 obj.addComponent(MyRotator, 'rotator', { speed: 10 });
+```
 
+```javascript
+// 传入组件实例、组件名称和组件参数
 let rotator = new MyRotator();
-obj.addComponent(rotator, 'rotator');
+obj.addComponent(rotator, 'rotator', { speed: 10 });
 ```
 
 ## 获取组件
 通过 对象成员`obj.components` 或 `getComponent`，可以获取对象的组件：
 ```javascript
-rotator = obj.getComponentByName('rotator');
-rotator = obj.getComponentByType(MyRotator);
+// 根据名称获取指定组件
+let rotator = obj.getComponentByName('rotator');
+```
 
-let comp = obj.components['rotator'];
+```javascript
+// 根据名称获取指定组件
+let rotator = obj.components['rotator'];
+```
+
+```javascript
+// 获取某种类型的组件，返回第一个该类型的组件
+let rotator = obj.getComponentByType(MyRotator);
+```
+
+```javascript
+// 获取某种类型的组件，以数组形式返回全部该类型组件
+let rotators = obj.getComponentsByType(MyRotator);
+```
+
+```javascript
+// 获取所有已使用的组件
+let components = obj.components;
+```
+
+```javascript
+// 获取所有组件，返回对象上挂载的所有组件
+let components = obj.getAllComponents();
 ```
 
 ## 禁用删除
@@ -100,7 +136,7 @@ class MyComp extends THING.Component {
 ```
 
 ## 导出成员
-下面的写法，可以将组件的`speed`属性和`setColor`方法暴露到对象身上使用：
+使用静态数组导出插件属性和方法，其中exportProperties用来导出属性，exportFunctions用来导出方法，下面的写法，可以将组件的`speed`属性和`setColor`方法暴露到对象身上使用：
 ```javascript
 class MyComp extends THING.Component {
     // 需要导出的属性

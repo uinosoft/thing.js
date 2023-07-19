@@ -13,7 +13,7 @@
 ## 加载蓝图
 如果需要在`ThingJS`项目中加载蓝图文件，首先要确保这个蓝图中用到的节点已被注册，`ThingJS`中经常用到的节点包含在：[thing.blueprint.nodes.js](./xx.js "blueprint.nodes")，如果有其他自定义节点也需要确认引入并注册。
 
-然后可以使用`app.load()`方法加载蓝图文件，加载后得到一个蓝图对象`blueprint`，调用`run()`来运行：
+然后可以使用`app.load()`方法加载运行蓝图文件：
 ```html
 <script src="./libs/thing.min.js"></script>
 <script src="./libs/thing.blueprint.nodes.js"></script>
@@ -22,7 +22,6 @@
 
     let asset = await app.load("/blueprints/bp01.json");
     let blueprint = asset.blueprints[0];
-    blueprint.run();
 </script>
 ```
 

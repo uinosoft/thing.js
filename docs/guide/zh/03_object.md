@@ -113,7 +113,7 @@ space.disjoint(obj, cascade = true);
 
 空间可视化，将空间渲染出来
 ```javascript
-space.showBounding(true);
+space.showBounding(); // 参数默认为true
 ```
 
 ## 父子对象

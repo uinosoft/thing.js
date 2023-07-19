@@ -16,10 +16,11 @@ const marker = new THING.Marker({
     style: {
         image: new THING.ImageTexture('./alarm_build.png')
     },
-    pivot: [0.5, 0]
+    pivot: [0.5, 0],
+    scale: [1, 1, 1]
 })
 
-// 设置标记缩放动画
+// 设置标记缩放动画, 在scale [1, 1, 1] 与[2, 2, 2] 之前插值切换
 marker.scaleTo([2, 2, 2], {
     duration: 2000,
     loopType: THING.LoopType.PingPong,
@@ -34,7 +35,7 @@ marker.scaleTo([2, 2, 2], {
 let label = new THING.Label({
     fontText: '文字标签 ',
     fontSize: 25,
-    position: [0, 15, 0],
+    position: [0, 2, 0],
     renderType: THING.RenderType.Plane
 });
 ```
@@ -50,7 +51,7 @@ let richLabel = new THING.Label({           // 填充的文字标签
     </p>`,
     fontColor: 'orange',
     richText: true,
-    position: [0, -15, 0]
+    position: [0, 2, 0]
 });
 ```
 
@@ -67,20 +68,28 @@ let label = new THING.Label({
 ```
 
 ## 页面元素
-可以直接给对象增加一个`CSS2DComponent`组件，通过 DOM 元素来设置一个页面元素的头顶牌效果：
+可以直接给对象增加一个`CSS2DComponent` 或`CSS3DComponent`组件，通过 DOM 元素来设置一个页面元素的头顶牌效果：
+```html
+  <div id="board1" style="width: 100px; height: 100px; background: red; position: absolute; left: -100px;">
+    CSS2D
+  </div>
+  <div id="board2" style="width: 100px; height: 100px; background: green; position: absolute; left: -100px">
+    CSS3D
+  </div>
+```
 ```javascript
 let box = new THING.Box(2,2,2);
 
 // 2D页面元素
-box.addComponent(THING.DOM.CSS2DComponent, 'sign');
-box.sign.domElement = document.getElementById('board');
-box.sign.offset = [0, 3, 0];
+box.addComponent(THING.DOM.CSS2DComponent, 'sign1');
+box.sign1.domElement = document.getElementById('board1');
+box.sign1.offset = [0, 3, 0];
 
 // 3D页面元素
-box.addComponent(THING.DOM.CSS3DComponent, 'sign');
-box.sign.domElement = document.getElementById('board');
-box.sign.pivot = [0.5, -0.5];
-box.sign.renderType = THING.RenderType.Plane;
+box.addComponent(THING.DOM.CSS3DComponent, 'sign2');
+box.sign2.domElement = document.getElementById('board2');
+box.sign2.pivot = [0.5, -0.5];
+box.sign2.renderType = THING.RenderType.Plane;
 ```
 
 ## 页面视图

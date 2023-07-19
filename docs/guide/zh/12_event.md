@@ -95,7 +95,7 @@ app.pauseEvent(THING.EventType.EnterLevel, '.Floor', eventTag);
 app.resumeEvent(THING.EventType.LeaveLevel, '.Floor', eventTag);
 ```
 
-可以通过`off`来停止某个事件。
+可以通过`off`来卸载某个事件。
 ```javascript
 box.off('update');
 ```

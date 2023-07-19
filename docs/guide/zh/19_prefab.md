@@ -13,13 +13,14 @@ await obj.waitForComplete();
 obj.doSomeMethod();
 ```
 
+## 预制件CLI
 可通过CLI创建一个预制件包：
 ```bash
 > thing create my-prefab
 ```
-然后选择 `Resource` 类型下的 `Prefab` 选项创建预制件模版。
+然后选择 `Resource` 类型下的 `Prefab` 选项创建预制件模版。按下回车键，开始创建预制件项目。创建过程耗时较长，请稍作等待，整个过程包括下载模板，安装依赖，项目编译构建三个步骤，每个步骤均有提示信息。
 
-切换目录并安装依赖后即可进入开发调试
+预制件项目创建后，切换至当前预制件项目目录之后，即可进入开发调试
 ```bash
 > cd my-prefab
 > npm run dev
@@ -29,5 +30,4 @@ obj.doSomeMethod();
 > 注意：`src`下可以创建多个预制件目录，对应`dist`目录也会编译成多份预制件资源。
 
 编写时，可以通过默认提供的`index.html`页面来进行测试，导出按钮可以保存当前预制件。
-
 

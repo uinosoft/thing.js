@@ -25,4 +25,3 @@ await THING.Utils.login('http://10.100.32.55:18081/auth/login');
 
 具体方法，请参考授权服务器使用文档。
 
-

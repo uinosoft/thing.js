@@ -88,7 +88,7 @@ console.log(asset.blueprints[0]);
 
 ```javascript
 // 加载，但不立即生效
-let asset = await app.load("./themes/theme.json", {apply: false});
+let asset = await app.load("./themes/theme.json", { apply: false });
 
 // 在需要的时候，让其生效
 asset.apply();
@@ -141,9 +141,8 @@ let obj = new THING.Entity({
 });
 ```
 
-## 导出
 导出文件，需要通过构建一个`SceneExporter`的导出器，将需要导出的内容添加到导出器中，然后导出。
-
+创建导出器
 ```javascript
 // 导出器
 let exporter = new THING.SceneExporter();
@@ -210,6 +209,17 @@ exporter.addFiles([
     "./scene01.json",
     "./scene02.json"
 ]);
+```
+
+添加拓展信息
+```javascript
+exporter.addExtensions({ isPrefab: true });
+```
+
+注册Resolver
+```javascript
+let resolver = new THING.StorageResolver({data: []});
+exporter.registerResolver('storage', resolver);
 ```
 
 导出：

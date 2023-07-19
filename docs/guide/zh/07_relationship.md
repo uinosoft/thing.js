@@ -59,6 +59,8 @@ objs = obj.relationship.queryByName("control01");
 let rls = app.queryRelationships({
     "type": "control"
 });
-rls.destroy();
+rls.forEach(r => {
+    r.destroy();
+})
 ```
 

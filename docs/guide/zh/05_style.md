@@ -85,7 +85,7 @@ obj.style = {
 ```javascript
 // 淡入
 object.fadeIn({
-    loop: 2, // 2 次，如果是true则是循环
+    loop: 2, // 2 次，如果是-1则是循环
     duration: 2000
 });
 // 淡出
@@ -98,5 +98,4 @@ object.fadeOut({
 // 开启批量渲染
 app.query('*').makeInstancedDrawing();
 ```
-
 

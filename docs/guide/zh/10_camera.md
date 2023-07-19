@@ -1,9 +1,8 @@
 # 摄影机
 
 在`ThingJS`引擎中，默认提供了摄影机对象`app.camera`，以及它的默认控制方式。摄影机就相当于手机上的摄像头，随着摄影机的位置`position`、拍摄点`target`的变化，对场景进行取景，之后渲染到屏幕上。摄影机提供了设置视角、飞行、模式，以及控制方式等多种功能。
-
 ## 视角
-通过摄影机的`position`、`target`属性，或这`lookAt`方法来设置摄影机看点和角度：
+通过摄影机的`position`、`target`属性，或者`lookAt`方法来设置摄影机看点和角度：
 ```javascript
 // 设置摄像机位置
 app.camera.position = [0, 20, 20];
@@ -17,12 +16,14 @@ app.camera.lookAt([-30, 10, 0]);
 
 摄影机提供的`fit`方法，可以根据对象的大小，自动计算一个最佳看点，并设置到这个看点上：
 ```javascript
+// 摄像机聚焦到obj对象上
 app.camera.fit(obj);
 ```
 
 ## 飞行
 摄影机提供的`flyTo`方法，可以飞到一个位置和看点上，通过`duration`设置飞行时间，飞行完成后调用`onComplete`方法。
 ```javascript
+// 摄像机经过1000ms飞行到指定位置和视点
 app.camera.flyTo({
     position: [2, 5, 6],
     target: [0, 0, 0],
@@ -40,11 +41,11 @@ app.camera.flyTo({
 
 可通过摄影机的`setProjectionType`来设置两种模式，枚举`ProjectionType`包含两种模式，`duration`参数可以控制切换模式的过渡时间：
 ```javascript
-// 设置为正交投影（切换时间2秒）, .Perspective为透视投影
+// 设置为正交投影（切换时间2秒）
 app.camera.setProjectionType(THING.ProjectionType.Orthographic, 2000);
 ```
 
-摄影机还提供了几种视图的切换（正、顶、侧视图），一般可以配合正交模式，枚举`ViewModeType`中，提供多种视图模式：
+摄影机还提供了几种视图的切换（正、顶、侧视图），一般会配合正交模式一起使用，枚举`ViewModeType`中，提供多种视图模式：
 ```javascript
 // 设置顶视图
 app.camera.viewMode = THING.ViewModeType.Top;
@@ -57,9 +58,9 @@ camera.enable = true; // 打开/关闭控制操作
 camera.enableRotate = true; // 打开/关闭旋转
 camera.enablePan = true; // 打开/关闭平移
 camera.enableZoom = true; // 打开/关闭缩放
-camera.rotateSpeed = 1; // 获取/设置旋转速度
-camera.panSpeed = 1; // 获取/设置平移速度
-camera.zoomSpeed = 1; // 获取/设置缩放速度
+camera.rotateSpeed = 1; // 设置旋转速度
+camera.panSpeed = 1; // 设置平移速度
+camera.zoomSpeed = 1; // 设置缩放速度
 ```
 可以通过重写摄影机控制组件，来实现一个你自己的摄影机控制方式。更多控制可以参考API手册。
 
@@ -80,7 +81,11 @@ camera.fov = 45;
 ```javascript
 // 增加一个摄影机
 var cam01 = new THING.Camera();
+// 设置摄像机的位置
+cam01.position = [0, 10, 0];
+// 开启视口渲染模式
 cam01.enableViewport = true;
+// 设置视口大小
 cam01.viewport = [0, 15, 128, 128];	// left, top, width, height
 
 // 再增加一个摄影机

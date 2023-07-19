@@ -55,4 +55,3 @@ obj = new THING.Entity({
 });
 ```
 
-

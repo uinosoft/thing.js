@@ -22,7 +22,7 @@ app.queryByTags('Building | BuildingElement');
 app.queryByUserData('物体类型');
 
 // 按标自定义属性查，userData中， 包含 '物体类型' 名称，并且属性值为 '叉车' 的对象
-app.queryByUserData('物体类型', '叉车');
+app.queryByUserData('物体类型=叉车');
 
 // 按照正则表达式查
 const exp = new RegExp("car");
@@ -51,7 +51,7 @@ app.query('.Entity').query('[userData/品牌=IBM]');
 
 局部查询是指在某个对象孩子范围内的查询，通过`obj.query`接口实现，接口的方式类似`app.query`，下面举一些例子，其中假设`building`是一个建筑对象：
 ```javascript
-// 子对象查询，查询自定义属性中包含“物体类型”的子对象
+// 子对象查询，查询自定义属性中包含 '物体类型' 的子对象
 obj.query('[userData/物体类型]');
 
 // 选取建筑内的所有房间
@@ -111,5 +111,26 @@ app.query('.Entity').remove('car04');
 // 自己创建选择器
 let sel = new Selector();
 sel.push(obj);
+```
+
+选择器还支持以动态查询的方式进行处理：
+
+```javascript
+// 以动态查询的方式，收集 Box 类型的对象集合
+let result = app.query('.Box', { dynamic: true });
+
+// 创建子对象
+let box1 = new THING.Box({
+    position: [0, 3, 0],
+});
+
+let box2 = new THING.Box({
+    position: [0, -3, 0],
+});
+
+// 当最后一个对象创建完毕后，输出对象集合信息
+box2.on(THING.EventType.Create, function () {
+    console.log(result);
+});
 ```
 
