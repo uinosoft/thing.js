@@ -17,7 +17,7 @@ Global Build:
 ## NPM 
 To install `ThingJS` cli, use:
 ```bash
-> npm install @thing.js/cli -g
+> npm install @uinosoft/thing-cli -g
 ```
 Then you can create `ThingJS` project, use:
 ```bash
