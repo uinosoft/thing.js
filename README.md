@@ -33,7 +33,7 @@ By default, `ThingJS` uses an element with `div3d` tag as the 3d rendering area.
     <head>
         <title>ThingJS</title>
         <meta charset="utf-8" />
-        <script src="./labs/thing.min.js"></script>
+        <script src="./libs/thing.min.js"></script>
     </head>
 
     <body style="margin: 0; padding: 0">
