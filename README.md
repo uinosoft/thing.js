@@ -13,6 +13,7 @@ Global Build:
     const app = new THING.App();
 </script>
 ```
+> TEST
 
 ## NPM 
 To install `ThingJS` cli, use:
